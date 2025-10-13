@@ -1,0 +1,9 @@
+transformers
+torch
+fastapi
+uvicorn
+datasets
+evaluate
+wandb
+python-dotenv
+

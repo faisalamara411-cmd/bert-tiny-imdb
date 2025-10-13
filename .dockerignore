@@ -1,0 +1,8 @@
+src/bert-tiny-sentiment
+src/results
+src/wandb
+
+test.csv
+train.csv
+
+.env
