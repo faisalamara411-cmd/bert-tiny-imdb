@@ -25,13 +25,14 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Build and push Docker image
+      - name: Build and Push Docker Image
         uses: docker/build-push-action@v5
         with:
           context: .
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/tiny-bert-imdb-model:latest
+          tags: amara864/tiny-bert-imdb-model:latest
           platforms: linux/amd64
+
 
 
 
