@@ -1,6 +1,6 @@
 name: Build and Push IMDb Docker Image
 
-on:
+on: # trigger rebuild
   push:
     branches:
       - main
