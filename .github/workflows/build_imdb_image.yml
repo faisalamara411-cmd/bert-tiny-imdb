@@ -29,5 +29,3 @@ jobs:
       - name: Push Docker image om Docker hub
         run: docker push${{secrets.DOCKER_USERNAME}}/tiny-bert-imdb-model:latest 
   
-
-      
