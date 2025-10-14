@@ -6,4 +6,6 @@ datasets
 evaluate
 wandb
 python-dotenv
-
+gradio
+streamlit
+requests
