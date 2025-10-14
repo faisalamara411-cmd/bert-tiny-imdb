@@ -1,7 +1,7 @@
-name: Build and Push Docker Image
+name: Build Docker Image
 
-on:
-  push:
+on: # when to trigger the work flow
+  push: # when code is pushed to branch
     branches:
       - main
   pull_request:
@@ -9,34 +9,25 @@ on:
       - main
 
 jobs:
-  build:
+  build-and-push:
     runs-on: ubuntu-latest
 
     steps:
-      # Checkout repository code
+      
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
 
-      # Set up Docker Buildx (required for building multi-platform images)
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+      
+      - name: log into docker hub
+        run: echo "${{secrets.DOCKER_PASSWORD}}"| docker login -u "${{secrets.DOCKER_USERNAME}}"
 
-      # Log in to Docker Hub (optional but needed if you want to push)
-      - name: Log in to Docker Hub
-        uses: docker/login-action@v3
-        with:
-          username: ${{ secrets.DOCKER_USERNAME}}
-          password: ${{ secrets.DOCKER_PASSWORD }}
+      
+      - name: Build the image
+        run: docker build -t ${{secrets.DOCKER_USERNAME}}/tiny-bert-imdb-model:latest . #amara864/tiny-bert-imdb-model:latest
+        
+        
+      - name: Push Docker image om Docker hub
+        run: docker push${{secrets.DOCKER_USERNAME}}/tiny-bert-imdb-model:latest 
+  
 
-      # Build and push Docker image
-      - name: Build and push
-        uses: docker/build-push-action@v6
-        with:
-          context: .
-          push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}amara864/bert-tiny-imdb:latest
-
-      # Verify build success
-      - name: Verify image
-        run: docker images
-
+      
