@@ -1,0 +1,38 @@
+# === Local datasets and model directories ===
+train.csv
+test.csv
+*.csv
+src/bert-tiny-imdb/
+
+# === Local training scripts and artifacts ===
+src/train.py
+results/
+wandb/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# === Model and checkpoint files ===
+*.pt
+*.bin
+*.h5
+*.ckpt
+*.json
+
+# === Docker & build artifacts ===
+Dockerfile
+*.log
+*.tmp
+
+# === Virtual environments ===
+venv/
+.env/
+.env
+*.env
+
+# === OS and IDE junk ===
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

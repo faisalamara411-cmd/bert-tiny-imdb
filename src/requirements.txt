@@ -1,11 +1,10 @@
-transformers
+streamlit
+requests
 torch
 fastapi
 uvicorn
-datasets
-evaluate
-wandb
-python-dotenv
 gradio
-streamlit
-requests
+wandb
+evaluate
+datasets
+transformers
