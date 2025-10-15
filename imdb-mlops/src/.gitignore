@@ -1,38 +1,16 @@
-# === Local datasets and model directories ===
+echo "# Ignore local data and models
+src/bert-tiny-imdb/
 train.csv
 test.csv
-*.csv
-src/bert-tiny-imdb/
 
-# === Local training scripts and artifacts ===
-src/train.py
-results/
-wandb/
+# Ignore compiled files
 __pycache__/
 *.pyc
-*.pyo
-*.pyd
 
-# === Model and checkpoint files ===
-*.pt
-*.bin
-*.h5
-*.ckpt
-*.json
-
-# === Docker & build artifacts ===
-Dockerfile
-*.log
-*.tmp
-
-# === Virtual environments ===
-venv/
-.env/
+# Ignore environment and secrets
 .env
-*.env
+wandb/
 
-# === OS and IDE junk ===
+# Ignore other temp files
 .DS_Store
-Thumbs.db
-.vscode/
-.idea/
+" > .gitignore

@@ -1,0 +1,13 @@
+﻿# Local models and datasets
+src/bert-tiny-imdb/
+train.csv
+test.csv
+
+# Local training / scripts
+src/train.py
+__pycache__/
+wandb/
+Dockerfile
+
+# Environment and secrets
+.env
