@@ -1,26 +1,37 @@
 import streamlit as st
-import requests
+from transformers import AutoTokenizer, AutoModelForSequenceClassification
+import torch
 
-# URL of your FastAPI backend
-API_URL = "http://127.0.0.1:8000/predict"
+# Load model and tokenizer
+@st.cache_resource
+def load_model():
+    model_name = "prajjwal1/bert-tiny"
+    tokenizer = AutoTokenizer.from_pretrained(model_name)
+    model = AutoModelForSequenceClassification.from_pretrained(model_name, num_labels=2)
+    return tokenizer, model
 
-st.title("IMDb Sentiment Analysis")
+tokenizer, model = load_model()
 
-# Text input from user
-user_input = st.text_area("Enter movie review text:")
+st.title("🎬 IMDb Sentiment Analysis")
+st.write("Enter a movie review below and find out whether it's **positive** or **negative**.")
+
+user_input = st.text_area("📝 Enter movie review text:")
 
 if st.button("Predict Sentiment"):
     if user_input.strip() != "":
-        payload = {"text": user_input}
-        try:
-            response = requests.post(API_URL, json=payload)
-            result = response.json()
-            
-            st.write("**Sentiment:**", result.get("sentiment"))
-            st.write("**Confidence:**", round(result.get("confidence"), 4))
-            st.write("**Probabilities:**", result.get("probabilities"))
-        except Exception as e:
-            st.error(f"Error connecting to API: {e}")
+        inputs = tokenizer(user_input, return_tensors="pt", truncation=True, padding=True)
+        with torch.no_grad():
+            outputs = model(**inputs)
+            probs = torch.nn.functional.softmax(outputs.logits, dim=-1)
+            pred = torch.argmax(probs, dim=1).item()
+
+        sentiment = "Positive 😊" if pred == 1 else "Negative 😞"
+        confidence = probs[0][pred].item()
+
+        st.success(f"**Sentiment:** {sentiment}")
+        st.write(f"**Confidence:** {confidence:.4f}")
+        st.write("**Probabilities:**", probs.tolist())
     else:
         st.warning("Please enter some text to predict.")
+
 

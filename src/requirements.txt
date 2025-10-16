@@ -1,10 +1,3 @@
 streamlit
-requests
 torch
-fastapi
-uvicorn
-gradio
-wandb
-evaluate
-datasets
 transformers
