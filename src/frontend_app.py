@@ -4,7 +4,6 @@ import requests
 # URL of your FastAPI backend
 API_URL = "http://127.0.0.1:8000/predict"
 
-
 st.title("IMDb Sentiment Analysis")
 
 # Text input from user
@@ -24,5 +23,4 @@ if st.button("Predict Sentiment"):
             st.error(f"Error connecting to API: {e}")
     else:
         st.warning("Please enter some text to predict.")
-
 
