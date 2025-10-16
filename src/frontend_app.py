@@ -2,7 +2,7 @@ import streamlit as st
 import requests
 
 # URL of your FastAPI backend
-API_URL = "https://your-fastapi-app.onrender.com/predict"
+API_URL = "http://127.0.0.1:8000/predict"
 
 
 st.title("IMDb Sentiment Analysis")
