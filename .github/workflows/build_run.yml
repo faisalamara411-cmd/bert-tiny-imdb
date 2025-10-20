@@ -20,14 +20,19 @@ jobs:
       - name: Log in to Docker Hub
         uses: docker/login-action@v3
         with:
-          username: ${{ secrets.DOCKER_USERNAME }}
+          username: amara864
           password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Verify repo structure
+        run: |
+          echo "Repo contents:"
+          ls -R
 
       - name: Build and Push Backend Image
         uses: docker/build-push-action@v5
         with:
           context: ./bert-tiny-imdb
-          file: ./bert-tiny-imdb/backend.Dockerfile
+          file: bert-tiny-imdb/backend.Dockerfile
           push: true
           tags: amara864/imdb-backend:latest
           platforms: linux/amd64
@@ -36,7 +41,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: ./bert-tiny-imdb
-          file: ./bert-tiny-imdb/frontend.Dockerfile
+          file: bert-tiny-imdb/frontend.Dockerfile
           push: true
           tags: amara864/imdb-frontend:latest
           platforms: linux/amd64
