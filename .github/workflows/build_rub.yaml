@@ -24,10 +24,9 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r src/requirements.txt
 
-
       - name: Train model
         run: |
-          cd imdb-mlops/src
+          cd src
           python train.py
 
       - name: Log in to Docker Hub
@@ -38,12 +37,12 @@ jobs:
 
       - name: Build Backend Docker image
         run: |
-          cd imdb-mlops/src
+          cd src
           docker build -t amara864/bert-tiny-imdb-backend:latest -f backend.Dockerfile .
 
       - name: Build Frontend Docker image
         run: |
-          cd imdb-mlops/src
+          cd src
           docker build -t amara864/bert-tiny-imdb-frontend:latest -f frontend.Dockerfile .
 
       - name: Push Backend image to Docker Hub
