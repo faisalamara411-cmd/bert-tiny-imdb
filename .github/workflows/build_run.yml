@@ -49,6 +49,3 @@ jobs:
 
       - name: Check Running Containers
         run: docker ps -a
-
-
-
