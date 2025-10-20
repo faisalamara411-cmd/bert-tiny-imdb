@@ -23,34 +23,31 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      # Backend
       - name: Build and Push Backend Image
         uses: docker/build-push-action@v5
         with:
-          context: .
-          file: ./backend.Dockerfile
+          context: ./bert-tiny-imdb
+          file: ./bert-tiny-imdb/backend.Dockerfile
           push: true
           tags: amara864/imdb-backend:latest
           platforms: linux/amd64
 
-      # Frontend
       - name: Build and Push Frontend Image
         uses: docker/build-push-action@v5
         with:
-          context: .
-          file: ./frontend.Dockerfile
+          context: ./bert-tiny-imdb
+          file: ./bert-tiny-imdb/frontend.Dockerfile
           push: true
           tags: amara864/imdb-frontend:latest
           platforms: linux/amd64
 
-      # Run backend container
       - name: Run Backend Container
         run: docker run -d --name imdb-backend -p 8000:8000 amara864/imdb-backend:latest
 
-      # Run frontend container
       - name: Run Frontend Container
         run: docker run -d --name imdb-frontend -p 8501:8501 amara864/imdb-frontend:latest
 
-      # Verify
       - name: Check Running Containers
         run: docker ps -a
+
+
