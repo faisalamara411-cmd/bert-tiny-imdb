@@ -1,72 +1,59 @@
-name: Build, Push, and Run IMDb Docker Containers
+name: Build, Push, and Run IMDb Containers
 
 on:
   push:
     branches:
       - main
-  workflow_dispatch:
+  workflow_dispatch:  # Allows manual trigger
 
 jobs:
-  build-and-run:
+  build-push-run:
     runs-on: ubuntu-latest
 
     steps:
-      # 1️⃣ Checkout repository
-      - name: Checkout repository
+      # Step 1: Checkout repository
+      - name: Checkout code
         uses: actions/checkout@v4
 
-      # 2️⃣ Set up Docker Buildx
+      # Step 2: Set up Docker Buildx (for advanced builds)
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      # 3️⃣ Log in to Docker Hub
+      # Step 3: Log in to Docker Hub
       - name: Log in to Docker Hub
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      # 4️⃣ Build & Push Backend Image
-      - name: Build & Push Backend Image
-        uses: docker/build-push-action@v5
-        with:
-          context: ./src
-          file: ./src/backend.Dockerfile
-          push: true
-          tags: amara864/bert-tiny-imdb-backend:latest
-          platforms: linux/amd64
-
-      # 5️⃣ Build & Push Frontend Image
-      - name: Build & Push Frontend Image
-        uses: docker/build-push-action@v5
-        with:
-          context: ./src
-          file: ./src/frontend.Dockerfile
-          push: true
-          tags: amara864/bert-tiny-imdb-frontend:latest
-          platforms: linux/amd64
-
-      # 6️⃣ Stop existing containers if they exist
-      - name: Stop old containers
+      # Step 4: Build Backend image
+      - name: Build Backend Image
         run: |
-          docker rm -f imdb-backend || true
-          docker rm -f imdb-frontend || true
-          docker network rm imdb-network || true
+          docker build -t amara864/imdb-backend:latest -f src/backend.Dockerfile src
 
-      # 7️⃣ Create a dedicated Docker network
-      - name: Create Docker network
-        run: docker network create imdb-network || true
+      # Step 5: Build Frontend image
+      - name: Build Frontend Image
+        run: |
+          docker build -t amara864/imdb-frontend:latest -f src/frontend.Dockerfile src
 
-      # 8️⃣ Run Backend Container
+      # Step 6: Push both images to Docker Hub
+      - name: Push Docker Images
+        run: |
+          docker push amara864/imdb-backend:latest
+          docker push amara864/imdb-frontend:latest
+
+      # Step 7: Run Backend container
       - name: Run Backend Container
         run: |
-          docker run -d --name imdb-backend --network imdb-network -p 8000:8000 amara864/bert-tiny-imdb-backend:latest
+          docker run -d --name imdb-backend -p 8000:8000 amara864/imdb-backend:latest
+          sleep 10  # wait for backend to start
 
-      # 9️⃣ Run Frontend Container
+      # Step 8: Run Frontend container
       - name: Run Frontend Container
         run: |
-          docker run -d --name imdb-frontend --network imdb-network -p 8501:8501 amara864/bert-tiny-imdb-frontend:latest
+          docker run -d --name imdb-frontend --link imdb-backend -p 8501:8501 amara864/imdb-frontend:latest
 
-      # 🔟 Check running containers
-      - name: List running containers
+      # Step 9: Check running containers
+      - name: Verify Running Containers
         run: docker ps -a
+
