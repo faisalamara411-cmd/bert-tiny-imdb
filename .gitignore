@@ -1,5 +1,4 @@
 ﻿# Local models and datasets
-src/bert-tiny-imdb/
 train.csv
 test.csv
 
